@@ -25,9 +25,20 @@ number_underscore = "thousands"
 
 [doc]
 out = "docs"
-title = "Morpho ZKML Spending Gate"
+title = "Morpho zkML Spending Gate"
 
 # Remappings for imports
 remappings = [
     "@openzeppelin/=lib/openzeppelin-contracts/",
+    "forge-std/=lib/forge-std/src/",
 ]
+
+# RPC endpoints
+[rpc_endpoints]
+arc_testnet = "https://rpc.testnet.arc.network"
+mainnet = "${ETH_RPC_URL}"
+base = "https://mainnet.base.org"
+
+# Etherscan API keys for verification
+[etherscan]
+arc_testnet = { key = "${ETHERSCAN_API_KEY}", url = "https://testnet.arcscan.app/api" }
