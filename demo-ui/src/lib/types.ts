@@ -36,6 +36,20 @@ export interface MarketData {
   utilization: number;
 }
 
+export interface MorphoMarket {
+  address: string;
+  name: string;
+  loanAsset: string;
+  collateralAsset: string;
+  supplyAPY: number;
+  borrowAPY: number;
+  utilization: number;
+  totalSupply: number;
+  totalBorrow: number;
+  lltv: number;
+  isLive: boolean; // true if fetched from API, false if fallback
+}
+
 export interface ProofState {
   status: 'idle' | 'preparing' | 'generating' | 'signing' | 'verifying' | 'complete' | 'error';
   progress: number;

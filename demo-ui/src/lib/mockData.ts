@@ -1,34 +1,68 @@
-import { MarketData, SpendingPolicy } from './types';
+import { MarketData, SpendingPolicy, MorphoMarket } from './types';
+import { fetchMorphoMarkets } from './morphoApi';
+import { DEFAULT_NETWORK } from './networks';
 
+// Static fallback markets (used when API unavailable)
 export const MOCK_MARKETS: MarketData[] = [
   {
-    address: '0x1234...5678',
-    name: 'USDC/WETH',
-    supplyAPY: 4.82,
-    borrowAPY: 6.15,
-    totalSupply: 125_000_000,
-    totalBorrow: 87_500_000,
-    utilization: 70,
-  },
-  {
-    address: '0x2345...6789',
-    name: 'USDC/wstETH',
+    address: '0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc',
+    name: 'wstETH/USDC',
     supplyAPY: 5.21,
-    borrowAPY: 7.03,
-    totalSupply: 89_000_000,
-    totalBorrow: 58_850_000,
-    utilization: 66,
+    borrowAPY: 6.83,
+    totalSupply: 142_500_000,
+    totalBorrow: 108_585_000,
+    utilization: 76.2,
   },
   {
-    address: '0x3456...7890',
-    name: 'DAI/WETH',
-    supplyAPY: 3.95,
-    borrowAPY: 5.42,
-    totalSupply: 67_000_000,
-    totalBorrow: 40_200_000,
-    utilization: 60,
+    address: '0x3a85e619751152991742810df6ec69ce473daef99e28a64ab2340d7b7ccfee49',
+    name: 'wstETH/WETH',
+    supplyAPY: 2.14,
+    borrowAPY: 3.21,
+    totalSupply: 89_200_000,
+    totalBorrow: 59_496_400,
+    utilization: 66.7,
+  },
+  {
+    address: '0x698fe98247a40c5771537b5786b2f3f9d78eb487b4ce4d75533cd0e94d88a115',
+    name: 'cbETH/USDC',
+    supplyAPY: 4.87,
+    borrowAPY: 6.12,
+    totalSupply: 67_300_000,
+    totalBorrow: 53_503_500,
+    utilization: 79.5,
   },
 ];
+
+// Fetch markets - tries live API first, falls back to mock
+let cachedMarkets: MorphoMarket[] | null = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 60000; // 1 minute cache
+
+export async function getMarkets(): Promise<{ markets: MorphoMarket[]; isLive: boolean }> {
+  const now = Date.now();
+
+  // Return cached if fresh
+  if (cachedMarkets && now - lastFetchTime < CACHE_TTL) {
+    return { markets: cachedMarkets, isLive: cachedMarkets[0]?.isLive ?? false };
+  }
+
+  // Try to fetch live data
+  const markets = await fetchMorphoMarkets(1); // Ethereum mainnet
+  cachedMarkets = markets;
+  lastFetchTime = now;
+
+  return { markets, isLive: markets[0]?.isLive ?? false };
+}
+
+// Network info for display
+export const NETWORK_INFO = {
+  name: DEFAULT_NETWORK.name,
+  chainId: DEFAULT_NETWORK.chainId,
+  explorer: DEFAULT_NETWORK.blockExplorer,
+  rpcUrl: DEFAULT_NETWORK.rpcUrl,
+  faucet: DEFAULT_NETWORK.faucetUrl,
+  nativeToken: DEFAULT_NETWORK.nativeToken,
+};
 
 export const DEFAULT_POLICY: SpendingPolicy = {
   dailyLimit: 10000,

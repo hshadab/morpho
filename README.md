@@ -319,16 +319,39 @@ This prototype demonstrates the **architecture and integration pattern** for zkM
 | **Morpho Blue Contract** | Mocked | Uses `MockMorphoBlue.sol` - replace with real Morpho deployment |
 | **Proof Verification** | Mocked | `MockJoltAtlasVerifier.sol` always returns true |
 | **On-chain Transactions** | Simulated | Demo UI simulates txs, no actual blockchain calls |
-| **Market Data** | Hardcoded | APY, utilization, TVL are mock values |
+| **Market Data** | Live + Fallback | Fetches from Morpho API; falls back to cached values |
 | **Agent Decisions** | Scripted | Demo uses pre-defined decision sequence |
 
 ### 🚀 Path to Production
 
 1. **Integrate NovaNet Prover** - Connect to live Jolt-Atlas prover service
-2. **Deploy to Testnet** - Deploy `MorphoSpendingGate` with real Morpho Blue address
+2. **Deploy to Arc Testnet** - Deploy `MorphoSpendingGate` on Circle's Arc L1 testnet (Chain ID: 5042002)
 3. **Implement Real Verifier** - Replace mock with actual SNARK verification
 4. **Security Audit** - Full audit of smart contracts before mainnet
-5. **Live Market Data** - Integrate Morpho subgraph/API for real market info
+5. ~~**Live Market Data**~~ ✅ - Morpho API integration implemented (fetches real APY/utilization data)
+
+## Network Configuration
+
+### Arc Testnet (Circle L1)
+
+The demo is configured for [Arc Testnet](https://docs.arc.network/), Circle's new L1 blockchain where Morpho is a launch partner:
+
+| Parameter | Value |
+|-----------|-------|
+| Chain ID | `5042002` |
+| RPC URL | `https://rpc.testnet.arc.network` |
+| Block Explorer | [testnet.arcscan.app](https://testnet.arcscan.app) |
+| Faucet | [faucet.circle.com](https://faucet.circle.com) |
+| Native Token | USDC |
+
+### Live Morpho Data
+
+The demo fetches real market data from Morpho's GraphQL API when available:
+- Supply/Borrow APY
+- Utilization rates
+- Total supply/borrow volumes
+
+Falls back to cached data if API is unreachable.
 
 ---
 

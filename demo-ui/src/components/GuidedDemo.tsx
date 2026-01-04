@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play, Pause, SkipForward, RotateCcw,
-  ChevronRight, Zap, Shield, Bot, CheckCircle, ExternalLink
+  ChevronRight, Zap, Shield, Bot, CheckCircle, ExternalLink, Globe, Radio
 } from 'lucide-react';
 import { SpendingPolicy, AgentConfig, Transaction, ProofState, MorphoOperation } from '../lib/types';
-import { MOCK_MARKETS, AGENT_DECISIONS, generateMockTxHash, generateMockProofHash, DEFAULT_POLICY } from '../lib/mockData';
+import { MOCK_MARKETS, AGENT_DECISIONS, generateMockTxHash, generateMockProofHash, DEFAULT_POLICY, NETWORK_INFO } from '../lib/mockData';
 
 interface WorkflowStep {
   id: string;
@@ -359,10 +359,25 @@ export function GuidedDemo() {
               </defs>
             </svg>
             {/* Tagline */}
-            <p className="text-base text-dark-200 leading-relaxed">
+            <p className="text-base text-dark-200 leading-relaxed mb-4">
               zkML-Verified Spending Policies for<br />
               <span className="text-morpho-400 font-semibold">Morpho Blue</span> Lending Protocol Agents
             </p>
+
+            {/* Network Badge */}
+            <a
+              href={NETWORK_INFO.explorer}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-dark-800 hover:bg-dark-700 rounded-lg text-xs transition-colors group"
+            >
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <Globe className="w-3.5 h-3.5 text-dark-400 group-hover:text-dark-300" />
+              </div>
+              <span className="text-dark-300 group-hover:text-white">{NETWORK_INFO.name}</span>
+              <ExternalLink className="w-3 h-3 text-dark-500" />
+            </a>
           </div>
         </div>
 
