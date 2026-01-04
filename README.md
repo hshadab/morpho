@@ -1,8 +1,16 @@
-# Morpho ZKML Spending Proofs
+# NovaNet ZKML Spending Proofs for Morpho Blue
 
 **Trustless Autonomous DeFi: AI Agents Managing Morpho Vaults with Cryptographic Policy Compliance**
 
-This project integrates [Jolt-Atlas ZKML Spending Proofs](https://github.com/hshadab/spendingproofs) with [Morpho Blue](https://github.com/morpho-org/morpho-blue), enabling AI agents to autonomously manage lending positions while proving every action complies with owner-defined spending policies.
+> ⚠️ **Disclaimer: Proof of Concept for Testing & Integration Exploration**
+>
+> This repository represents an **early-stage integration prototype** demonstrating how NovaNet's Jolt-Atlas ZKML infrastructure could integrate with Morpho Blue. This is intended for **testing, demonstration, and exploratory purposes only**.
+>
+> **Not for production use.** Smart contracts have not been audited. See [What's Real vs. Simulated](#whats-real-vs-simulated) below.
+
+---
+
+This project integrates [NovaNet Jolt-Atlas ZKML Spending Proofs](https://github.com/hshadab/spendingproofs) with [Morpho Blue](https://github.com/morpho-org/morpho-blue), enabling AI agents to autonomously manage lending positions while proving every action complies with owner-defined spending policies.
 
 ## The Problem
 
@@ -288,6 +296,42 @@ Agents manage leveraged positions with strict LTV constraints.
 ### 4. Rebalancing Bots
 Automated rebalancers prove their actions stay within bounds.
 
+## What's Real vs. Simulated
+
+This prototype demonstrates the **architecture and integration pattern** for ZKML-verified agent operations on Morpho Blue. Here's what's implemented vs. simulated:
+
+### ✅ Real / Production-Ready Architecture
+
+| Component | Status | Description |
+|-----------|--------|-------------|
+| **Smart Contract Design** | Real | `MorphoSpendingGate.sol` architecture, interfaces, and verification flow are production patterns |
+| **Policy Structure** | Real | `SpendingPolicy` struct with daily limits, LTV bounds, health factors, market whitelists |
+| **SDK TypeScript Types** | Real | Full type definitions for policies, proofs, operations |
+| **React Hooks Pattern** | Real | `useMorphoSpendingProof` hook architecture ready for real prover integration |
+| **Demo UI Workflow** | Real | Visualization of the end-to-end integration flow |
+
+### 🔶 Simulated / Mock Components
+
+| Component | Status | Production Requirement |
+|-----------|--------|------------------------|
+| **Jolt-Atlas Prover** | Mocked | Requires NovaNet prover service integration |
+| **Proof Generation** | Simulated | Currently returns mock proof data with simulated timing |
+| **Morpho Blue Contract** | Mocked | Uses `MockMorphoBlue.sol` - replace with real Morpho deployment |
+| **Proof Verification** | Mocked | `MockJoltAtlasVerifier.sol` always returns true |
+| **On-chain Transactions** | Simulated | Demo UI simulates txs, no actual blockchain calls |
+| **Market Data** | Hardcoded | APY, utilization, TVL are mock values |
+| **Agent Decisions** | Scripted | Demo uses pre-defined decision sequence |
+
+### 🚀 Path to Production
+
+1. **Integrate NovaNet Prover** - Connect to live Jolt-Atlas prover service
+2. **Deploy to Testnet** - Deploy `MorphoSpendingGate` with real Morpho Blue address
+3. **Implement Real Verifier** - Replace mock with actual SNARK verification
+4. **Security Audit** - Full audit of smart contracts before mainnet
+5. **Live Market Data** - Integrate Morpho subgraph/API for real market info
+
+---
+
 ## Development
 
 ### Build Contracts
@@ -305,7 +349,15 @@ npm run build
 npm run test
 ```
 
-### Run Demo
+### Run Demo UI
+
+```bash
+cd demo-ui
+npm install
+npm run dev
+```
+
+### Run Agent Simulation
 
 ```bash
 cd demo-app/agent-vault-manager
@@ -326,10 +378,11 @@ MIT License - see LICENSE file for details.
 
 ## Links
 
+- [NovaNet](https://novanet.xyz) - ZKML Infrastructure
 - [Jolt-Atlas Spending Proofs](https://github.com/hshadab/spendingproofs)
 - [Morpho Blue](https://github.com/morpho-org/morpho-blue)
 - [Morpho Documentation](https://docs.morpho.org)
 
 ---
 
-**Built for trustless autonomous DeFi.**
+**A NovaNet integration prototype for trustless autonomous DeFi.**
