@@ -16,7 +16,7 @@ export function Header() {
               <Shield className="w-6 h-6 text-white" />
             </motion.div>
             <div>
-              <h1 className="text-xl font-bold text-white">Morpho ZKML</h1>
+              <h1 className="text-xl font-bold text-white">Morpho zkML</h1>
               <p className="text-xs text-dark-400">Spending Proofs Demo</p>
             </div>
           </div>

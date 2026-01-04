@@ -21,7 +21,7 @@ const HIGHLIGHT_COLORS = {
 
 const HIGHLIGHT_LABELS = {
   morpho: 'Morpho Integration',
-  zkml: 'ZKML Technology',
+  zkml: 'zkML Technology',
   policy: 'Policy Enforcement',
   proof: 'Proof Verification',
 };

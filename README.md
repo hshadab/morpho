@@ -1,16 +1,16 @@
-# NovaNet ZKML Spending Proofs for Morpho Blue
+# NovaNet zkML Spending Proofs for Morpho Blue
 
 **Trustless Autonomous DeFi: AI Agents Managing Morpho Vaults with Cryptographic Policy Compliance**
 
 > ⚠️ **Disclaimer: Proof of Concept for Testing & Integration Exploration**
 >
-> This repository represents an **early-stage integration prototype** demonstrating how NovaNet's Jolt-Atlas ZKML infrastructure could integrate with Morpho Blue. This is intended for **testing, demonstration, and exploratory purposes only**.
+> This repository represents an **early-stage integration prototype** demonstrating how NovaNet's Jolt-Atlas zkML infrastructure could integrate with Morpho Blue. This is intended for **testing, demonstration, and exploratory purposes only**.
 >
 > **Not for production use.** Smart contracts have not been audited. See [What's Real vs. Simulated](#whats-real-vs-simulated) below.
 
 ---
 
-This project integrates [NovaNet Jolt-Atlas ZKML Spending Proofs](https://github.com/hshadab/spendingproofs) with [Morpho Blue](https://github.com/morpho-org/morpho-blue), enabling AI agents to autonomously manage lending positions while proving every action complies with owner-defined spending policies.
+This project integrates [NovaNet Jolt-Atlas zkML Spending Proofs](https://github.com/hshadab/spendingproofs) with [Morpho Blue](https://github.com/morpho-org/morpho-blue), enabling AI agents to autonomously manage lending positions while proving every action complies with owner-defined spending policies.
 
 ## The Problem
 
@@ -22,7 +22,7 @@ As AI agents become capable of managing DeFi positions, a critical trust gap eme
 
 ## The Solution
 
-**ZKML Spending Proofs** solve this by requiring agents to generate cryptographic proofs for every operation:
+**zkML Spending Proofs** solve this by requiring agents to generate cryptographic proofs for every operation:
 
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
@@ -95,7 +95,7 @@ npm run simulate
 This demonstrates:
 - Owner defining a spending policy
 - Agent authorization with policy constraints
-- Agent making decisions and generating ZKML proofs
+- Agent making decisions and generating zkML proofs
 - On-chain verification and execution
 
 ### 3. Deploy Contracts
@@ -298,7 +298,7 @@ Automated rebalancers prove their actions stay within bounds.
 
 ## What's Real vs. Simulated
 
-This prototype demonstrates the **architecture and integration pattern** for ZKML-verified agent operations on Morpho Blue. Here's what's implemented vs. simulated:
+This prototype demonstrates the **architecture and integration pattern** for zkML-verified agent operations on Morpho Blue. Here's what's implemented vs. simulated:
 
 ### ✅ Real / Production-Ready Architecture
 
@@ -378,7 +378,7 @@ MIT License - see LICENSE file for details.
 
 ## Links
 
-- [NovaNet](https://novanet.xyz) - ZKML Infrastructure
+- [NovaNet](https://novanet.xyz) - zkML Infrastructure
 - [Jolt-Atlas Spending Proofs](https://github.com/hshadab/spendingproofs)
 - [Morpho Blue](https://github.com/morpho-org/morpho-blue)
 - [Morpho Documentation](https://docs.morpho.org)

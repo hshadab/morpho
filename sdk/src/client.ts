@@ -1,7 +1,7 @@
 /**
  * Morpho Spending Proofs Client
  *
- * Main SDK client for generating ZKML proofs for Morpho operations
+ * Main SDK client for generating zkML proofs for Morpho operations
  */
 
 import type {

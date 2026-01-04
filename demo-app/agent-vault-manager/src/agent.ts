@@ -26,7 +26,7 @@ import type {
 import { STRATEGIES } from './types';
 
 /**
- * AgentVaultManager - Autonomous DeFi agent with ZKML spending proofs
+ * AgentVaultManager - Autonomous DeFi agent with zkML spending proofs
  */
 export class AgentVaultManager {
   private readonly client: MorphoSpendingProofsClient;
@@ -195,12 +195,12 @@ export class AgentVaultManager {
   }
 
   /**
-   * Execute an operation with ZKML proof
+   * Execute an operation with zkML proof
    */
   private async executeWithProof(market: Address, decision: AgentDecision): Promise<void> {
     if (!decision.operation || !decision.amount) return;
 
-    console.log('\n🔐 Generating ZKML proof...');
+    console.log('\n🔐 Generating zkML proof...');
 
     try {
       // Generate proof

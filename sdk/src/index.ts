@@ -1,7 +1,7 @@
 /**
  * Morpho Spending Proofs SDK
  *
- * ZKML spending proofs for Morpho Blue integration
+ * zkML spending proofs for Morpho Blue integration
  *
  * @example
  * ```typescript

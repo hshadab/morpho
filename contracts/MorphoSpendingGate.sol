@@ -9,7 +9,7 @@ import "./libraries/ProofDecoder.sol";
 
 /**
  * @title MorphoSpendingGate
- * @notice ZKML-gated wrapper for Morpho Blue operations
+ * @notice zkML-gated wrapper for Morpho Blue operations
  * @dev Requires Jolt-Atlas SNARK proofs for agents to execute vault operations
  *
  * This contract enables trustless autonomous DeFi by allowing AI agents to
@@ -250,7 +250,7 @@ contract MorphoSpendingGate is IMorphoSpendingGate {
             revert ProofExpired();
         }
 
-        // Verify ZKML proof
+        // Verify zkML proof
         if (!verifier.verify(proof.proof, proof.publicInputs, proof.policyHash)) {
             revert InvalidProof();
         }

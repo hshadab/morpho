@@ -27,7 +27,7 @@ const HIGHLIGHT_COLORS = {
 
 const HIGHLIGHT_LABELS = {
   morpho: 'Morpho Integration',
-  zkml: 'ZKML Technology',
+  zkml: 'zkML Technology',
   policy: 'Policy Enforcement',
   proof: 'Proof Verification',
 };
@@ -36,7 +36,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
   {
     id: 'intro-1',
     phase: 'intro',
-    title: 'Welcome to Morpho ZKML Spending Proofs',
+    title: 'Welcome to Morpho zkML Spending Proofs',
     description: 'This workflow shows how AI agents can autonomously manage Morpho vault positions while cryptographically proving every action complies with owner-defined policies.',
     highlight: 'morpho',
     duration: 5000,
@@ -85,7 +85,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
     id: 'auth-2',
     phase: 'authorize',
     title: 'Agent Authorization',
-    description: 'The owner authorizes the AI agent wallet address and binds it to the registered policy. The agent cannot operate without valid ZKML proofs.',
+    description: 'The owner authorizes the AI agent wallet address and binds it to the registered policy. The agent cannot operate without valid zkML proofs.',
     highlight: 'policy',
     duration: 4000,
   },
@@ -108,7 +108,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
   {
     id: 'agent-3',
     phase: 'agent',
-    title: 'ZKML Proof Generation',
+    title: 'zkML Proof Generation',
     description: 'The Jolt-Atlas prover runs the agent\'s neural network inside a SNARK circuit. This takes 4-12 seconds and produces a ~48KB proof.',
     highlight: 'zkml',
     duration: 4500,
@@ -133,7 +133,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
     id: 'agent-6',
     phase: 'agent',
     title: 'Second Proof Generation',
-    description: 'Another ZKML proof is generated. Every operation requires fresh proof - no blanket approvals, no trust assumptions.',
+    description: 'Another zkML proof is generated. Every operation requires fresh proof - no blanket approvals, no trust assumptions.',
     highlight: 'zkml',
     duration: 4500,
   },
@@ -149,7 +149,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
     id: 'complete-1',
     phase: 'complete',
     title: 'Workflow Complete: Trustless Autonomous DeFi',
-    description: 'The agent executed 2 operations with cryptographic policy compliance. No blind trust required - every action was verified with ZKML proofs.',
+    description: 'The agent executed 2 operations with cryptographic policy compliance. No blind trust required - every action was verified with zkML proofs.',
     highlight: 'proof',
     duration: 5000,
   },
@@ -157,7 +157,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
     id: 'complete-2',
     phase: 'complete',
     title: 'Integration Summary',
-    description: 'MorphoSpendingGate wraps Morpho Blue with ZKML verification. ~48KB proofs, ~200K gas verification, 4-12s generation time. Production-ready.',
+    description: 'MorphoSpendingGate wraps Morpho Blue with zkML verification. ~48KB proofs, ~200K gas verification, 4-12s generation time. Production-ready.',
     highlight: 'morpho',
     duration: 6000,
   },
@@ -491,7 +491,7 @@ export function GuidedDemo() {
                     <Zap className="w-12 h-12 text-morpho-400" />
                   </motion.div>
                   <h2 className="text-4xl font-bold text-white mb-4">
-                    Jolt-Atlas ZKML + Morpho Blue
+                    Jolt-Atlas zkML + Morpho Blue
                   </h2>
                   <p className="text-xl text-dark-400 max-w-xl mx-auto mb-12">
                     Enabling AI agents to manage DeFi positions with cryptographic policy compliance
@@ -500,7 +500,7 @@ export function GuidedDemo() {
                   <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto">
                     {[
                       { icon: Shield, label: 'Policy Enforcement', desc: 'Spending limits enforced on-chain' },
-                      { icon: Zap, label: 'ZKML Proofs', desc: '~48KB proofs in 4-12 seconds' },
+                      { icon: Zap, label: 'zkML Proofs', desc: '~48KB proofs in 4-12 seconds' },
                       { icon: Bot, label: 'Autonomous Agents', desc: 'AI manages positions trustlessly' },
                     ].map((item, i) => (
                       <motion.div
@@ -702,7 +702,7 @@ export function GuidedDemo() {
                         className="card p-6"
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold text-white">ZKML Proof Generation</h3>
+                          <h3 className="text-lg font-semibold text-white">zkML Proof Generation</h3>
                           <div className="text-3xl font-bold text-morpho-400">{proofState.progress}%</div>
                         </div>
 
@@ -843,7 +843,7 @@ export function GuidedDemo() {
                   <div className="grid grid-cols-4 gap-4 mb-10">
                     {[
                       { label: 'Morpho Txns', value: '2', color: 'text-morpho-400' },
-                      { label: 'ZKML Proofs', value: '2', color: 'text-purple-400' },
+                      { label: 'zkML Proofs', value: '2', color: 'text-purple-400' },
                       { label: 'Volume', value: '$6,350', color: 'text-green-400' },
                       { label: 'Policy Violations', value: '0', color: 'text-orange-400' },
                     ].map((stat, i) => (
@@ -879,7 +879,7 @@ export function GuidedDemo() {
                         <ul className="space-y-2 text-sm text-dark-300">
                           <li className="flex items-start gap-2">
                             <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                            <span><strong className="text-white">MorphoSpendingGate</strong> wrapped Morpho Blue with ZKML verification layer</span>
+                            <span><strong className="text-white">MorphoSpendingGate</strong> wrapped Morpho Blue with zkML verification layer</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
@@ -887,7 +887,7 @@ export function GuidedDemo() {
                           </li>
                           <li className="flex items-start gap-2">
                             <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                            <span>Every Morpho call required valid <strong className="text-white">ZKML spending proof</strong></span>
+                            <span>Every Morpho call required valid <strong className="text-white">zkML spending proof</strong></span>
                           </li>
                           <li className="flex items-start gap-2">
                             <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />

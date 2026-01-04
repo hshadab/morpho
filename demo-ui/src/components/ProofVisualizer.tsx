@@ -29,7 +29,7 @@ export function ProofVisualizer({ state, operation, amount }: ProofVisualizerPro
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-white">ZKML Proof Generation</h3>
+          <h3 className="text-lg font-semibold text-white">zkML Proof Generation</h3>
           {operation && amount && (
             <p className="text-sm text-dark-400">
               {operation} ${amount.toLocaleString()}

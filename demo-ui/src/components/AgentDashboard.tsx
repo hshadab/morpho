@@ -131,7 +131,7 @@ export function AgentDashboard({ policy, agent }: AgentDashboardProps) {
             Agentic Vault Manager
           </h2>
           <p className="text-dark-400 mt-1">
-            Autonomous DeFi operations with ZKML spending proofs
+            Autonomous DeFi operations with zkML spending proofs
           </p>
         </div>
 
@@ -290,7 +290,7 @@ export function AgentDashboard({ policy, agent }: AgentDashboardProps) {
           </div>
           <div className="flex items-center gap-2 text-green-400">
             <CheckCircle className="w-4 h-4" />
-            <span>All operations verified with ZKML proofs</span>
+            <span>All operations verified with zkML proofs</span>
           </div>
         </div>
       </div>

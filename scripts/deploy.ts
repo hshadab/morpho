@@ -1,7 +1,7 @@
 /**
  * Deployment Script for MorphoSpendingGate
  *
- * Deploys the ZKML-gated Morpho integration contracts
+ * Deploys the zkML-gated Morpho integration contracts
  */
 
 import { ethers } from 'ethers';

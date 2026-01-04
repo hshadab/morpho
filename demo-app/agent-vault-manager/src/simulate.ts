@@ -5,7 +5,7 @@
  * 1. Owner sets up spending policy
  * 2. Owner authorizes agent
  * 3. Agent analyzes markets and makes decisions
- * 4. Agent generates ZKML proofs for each action
+ * 4. Agent generates zkML proofs for each action
  * 5. Transactions execute through MorphoSpendingGate
  */
 
@@ -75,7 +75,7 @@ class MockProverServer {
  */
 async function runSimulation() {
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log('       MORPHO ZKML SPENDING PROOFS - AGENTIC VAULT MANAGER     ');
+  console.log('       MORPHO zkML SPENDING PROOFS - AGENTIC VAULT MANAGER     ');
   console.log('═══════════════════════════════════════════════════════════════');
   console.log();
 
@@ -191,7 +191,7 @@ async function runSimulation() {
     console.log();
 
     // Generate proof
-    console.log('🔐 Generating ZKML spending proof...');
+    console.log('🔐 Generating zkML spending proof...');
     const startTime = Date.now();
 
     try {
@@ -240,7 +240,7 @@ async function runSimulation() {
   console.log('═══════════════════════════════════════════════════════════════');
   console.log();
   console.log('   ✅ Owner defined spending policy with limits');
-  console.log('   ✅ Agent authorized with ZKML proof requirements');
+  console.log('   ✅ Agent authorized with zkML proof requirements');
   console.log('   ✅ Agent executed 3 operations with valid proofs');
   console.log('   ✅ All operations verified against policy constraints');
   console.log();

@@ -105,7 +105,7 @@ async function setupAgent(config: AgentSetupConfig): Promise<void> {
   console.log(`   • Supply up to $${Number(policy.maxSingleTx) / 1e6} per tx`);
   console.log(`   • Operate within $${Number(policy.dailyLimit) / 1e6} daily limit`);
   console.log(`   • Maintain LTV below ${policy.maxLTV / 100}%`);
-  console.log('   • All operations require valid ZKML proofs');
+  console.log('   • All operations require valid zkML proofs');
   console.log();
 }
 

@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 /**
  * @title IMorphoSpendingGate
- * @notice Interface for ZKML-gated Morpho Blue operations
+ * @notice Interface for zkML-gated Morpho Blue operations
  * @dev Agents must submit Jolt-Atlas SNARK proofs to execute vault operations
  */
 interface IMorphoSpendingGate {
@@ -71,7 +71,7 @@ interface IMorphoSpendingGate {
     function getAgentConfig(address agent) external view returns (AgentConfig memory);
     function isAgentAuthorized(address agent, address owner) external view returns (bool);
 
-    // Gated Operations (require ZKML proof)
+    // Gated Operations (require zkML proof)
     function supplyWithProof(
         address market,
         uint256 assets,
