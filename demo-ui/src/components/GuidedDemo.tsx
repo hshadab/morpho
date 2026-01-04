@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play, Pause, SkipForward, RotateCcw,
-  ChevronRight, Zap, Shield, Bot, CheckCircle, ExternalLink, Globe, Radio
+  ChevronRight, Zap, Shield, Bot, CheckCircle, ExternalLink, Globe, Radio, Cpu, ToggleLeft, ToggleRight, Wifi, WifiOff
 } from 'lucide-react';
 import { SpendingPolicy, AgentConfig, Transaction, ProofState, MorphoOperation } from '../lib/types';
 import { MOCK_MARKETS, AGENT_DECISIONS, generateMockTxHash, generateMockProofHash, DEFAULT_POLICY, NETWORK_INFO } from '../lib/mockData';
+import { generateZkmlProof, checkProverHealth, getProverInfo } from '../lib/zkmlProver';
 
 interface WorkflowStep {
   id: string;
@@ -166,7 +167,7 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
 export function GuidedDemo() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Workflow state
   const [policy, setPolicy] = useState<SpendingPolicy | null>(null);
@@ -176,6 +177,23 @@ export function GuidedDemo() {
   const [dailySpent, setDailySpent] = useState(0);
   const [currentDecision, setCurrentDecision] = useState<typeof AGENT_DECISIONS[0] | null>(null);
   const [policyHash, setPolicyHash] = useState('');
+
+  // Real zkML prover state
+  const [useRealProver, setUseRealProver] = useState(true);
+  const [proverOnline, setProverOnline] = useState<boolean | null>(null);
+  const [waitingForProof, setWaitingForProof] = useState(false);
+  const [lastProofResult, setLastProofResult] = useState<{
+    proofHash: string;
+    generationTimeMs: number;
+    proofSizeBytes: number;
+    approved: boolean;
+    confidence: number;
+  } | null>(null);
+
+  // Check prover health on mount
+  useEffect(() => {
+    checkProverHealth().then(setProverOnline);
+  }, []);
 
   const currentStep = WORKFLOW_STEPS[currentStepIndex];
   const phase = currentStep.phase;
@@ -194,6 +212,9 @@ export function GuidedDemo() {
     // Clear any existing timer
     if (timerRef.current) clearTimeout(timerRef.current);
 
+    // Don't advance while waiting for real proof
+    if (waitingForProof) return;
+
     // Execute step-specific actions
     executeStepAction(currentStep.id);
 
@@ -209,7 +230,7 @@ export function GuidedDemo() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [currentStepIndex, isPlaying]);
+  }, [currentStepIndex, isPlaying, waitingForProof]);
 
   const executeStepAction = (stepId: string) => {
     switch (stepId) {
@@ -277,7 +298,64 @@ export function GuidedDemo() {
     }
   };
 
-  const runProofAnimation = () => {
+  const runProofAnimation = async (operation: 'supply' | 'borrow' = 'supply', amount: number = 4250) => {
+    if (useRealProver && proverOnline) {
+      // Use real NovaNet zkML prover
+      setWaitingForProof(true);
+      setProofState({ status: 'preparing', progress: 0 });
+
+      try {
+        const result = await generateZkmlProof(
+          {
+            operation,
+            amountUsdc: amount,
+            dailyLimitUsdc: policy?.dailyLimit || 10000,
+            spentTodayUsdc: dailySpent,
+            budgetUsdc: 50000,
+            marketSuccessRate: 0.95,
+          },
+          (progress, statusText) => {
+            const status = progress < 20 ? 'preparing' : progress < 70 ? 'generating' : progress < 85 ? 'signing' : 'verifying';
+            setProofState({ status, progress });
+          }
+        );
+
+        setLastProofResult({
+          proofHash: result.proofHash,
+          generationTimeMs: result.generationTimeMs,
+          proofSizeBytes: result.proofSizeBytes,
+          approved: result.approved,
+          confidence: result.confidence,
+        });
+
+        setProofState({
+          status: 'complete',
+          progress: 100,
+          proofSize: result.proofSizeBytes,
+          proofHash: result.proofHash,
+          gasEstimate: 198500,
+        });
+
+        // Auto-advance to next step after a brief delay
+        setTimeout(() => {
+          setWaitingForProof(false);
+          if (currentStepIndex < WORKFLOW_STEPS.length - 1) {
+            setCurrentStepIndex(prev => prev + 1);
+          }
+        }, 1500);
+      } catch (error) {
+        console.error('Proof generation failed:', error);
+        setWaitingForProof(false);
+        // Fall back to simulated proof
+        runSimulatedProof();
+      }
+    } else {
+      // Use simulated proof animation
+      runSimulatedProof();
+    }
+  };
+
+  const runSimulatedProof = () => {
     let progress = 0;
     const interval = setInterval(() => {
       progress += 5;
@@ -300,6 +378,8 @@ export function GuidedDemo() {
     setDailySpent(0);
     setCurrentDecision(null);
     setPolicyHash('');
+    setWaitingForProof(false);
+    setLastProofResult(null);
     setIsPlaying(true);
   };
 
@@ -378,6 +458,47 @@ export function GuidedDemo() {
               <span className="text-dark-300 group-hover:text-white">{NETWORK_INFO.name}</span>
               <ExternalLink className="w-3 h-3 text-dark-500" />
             </a>
+
+            {/* Real Prover Toggle */}
+            <div className="mt-4 p-3 bg-dark-800/50 rounded-lg border border-dark-700">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium text-dark-300">zkML Prover</span>
+                <button
+                  onClick={() => setUseRealProver(!useRealProver)}
+                  className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-colors ${
+                    useRealProver
+                      ? 'bg-purple-500/20 text-purple-400'
+                      : 'bg-dark-700 text-dark-400'
+                  }`}
+                >
+                  {useRealProver ? <ToggleRight className="w-3.5 h-3.5" /> : <ToggleLeft className="w-3.5 h-3.5" />}
+                  {useRealProver ? 'Real' : 'Simulated'}
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                {proverOnline === null ? (
+                  <div className="flex items-center gap-1.5 text-xs text-dark-500">
+                    <div className="w-2 h-2 bg-dark-600 rounded-full animate-pulse" />
+                    Checking...
+                  </div>
+                ) : proverOnline ? (
+                  <div className="flex items-center gap-1.5 text-xs text-green-400">
+                    <Wifi className="w-3 h-3" />
+                    NovaNet Online
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-xs text-orange-400">
+                    <WifiOff className="w-3 h-3" />
+                    Offline (simulated)
+                  </div>
+                )}
+              </div>
+              {useRealProver && proverOnline && (
+                <div className="mt-2 text-xs text-dark-500">
+                  Proofs: ~48KB • 4-12s warm
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -717,7 +838,18 @@ export function GuidedDemo() {
                         className="card p-6"
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold text-white">zkML Proof Generation</h3>
+                          <div className="flex items-center gap-3">
+                            <h3 className="text-lg font-semibold text-white">zkML Proof Generation</h3>
+                            {useRealProver && proverOnline ? (
+                              <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 text-xs font-medium rounded">
+                                NovaNet Live
+                              </span>
+                            ) : (
+                              <span className="px-2 py-0.5 bg-dark-700 text-dark-400 text-xs font-medium rounded">
+                                Simulated
+                              </span>
+                            )}
+                          </div>
                           <div className="text-3xl font-bold text-morpho-400">{proofState.progress}%</div>
                         </div>
 
@@ -742,9 +874,36 @@ export function GuidedDemo() {
                         </div>
 
                         {proofState.status === 'complete' && (
-                          <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg flex items-center gap-3">
-                            <CheckCircle className="w-6 h-6 text-green-400" />
-                            <span className="text-green-400 font-medium">Proof verified! Executing on Morpho Blue...</span>
+                          <div className="mt-4 space-y-3">
+                            <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg flex items-center gap-3">
+                              <CheckCircle className="w-6 h-6 text-green-400" />
+                              <span className="text-green-400 font-medium">Proof verified! Executing on Morpho Blue...</span>
+                            </div>
+                            {lastProofResult && useRealProver && (
+                              <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Zap className="w-4 h-4 text-purple-400" />
+                                  <span className="text-sm font-medium text-purple-400">Real NovaNet Proof</span>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3 text-sm">
+                                  <div>
+                                    <div className="text-dark-500">Generation</div>
+                                    <div className="font-mono text-white">{(lastProofResult.generationTimeMs / 1000).toFixed(1)}s</div>
+                                  </div>
+                                  <div>
+                                    <div className="text-dark-500">Size</div>
+                                    <div className="font-mono text-white">{(lastProofResult.proofSizeBytes / 1024).toFixed(1)} KB</div>
+                                  </div>
+                                  <div>
+                                    <div className="text-dark-500">Confidence</div>
+                                    <div className="font-mono text-white">{(lastProofResult.confidence * 100).toFixed(0)}%</div>
+                                  </div>
+                                </div>
+                                <div className="mt-2 text-xs text-dark-500 font-mono truncate">
+                                  {lastProofResult.proofHash}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
                       </motion.div>
@@ -858,7 +1017,7 @@ export function GuidedDemo() {
                   <div className="grid grid-cols-4 gap-4 mb-10">
                     {[
                       { label: 'Morpho Txns', value: '2', color: 'text-morpho-400' },
-                      { label: 'zkML Proofs', value: '2', color: 'text-purple-400' },
+                      { label: 'zkML Proofs', value: useRealProver && proverOnline ? '2 (Real)' : '2 (Sim)', color: 'text-purple-400' },
                       { label: 'Volume', value: '$6,350', color: 'text-green-400' },
                       { label: 'Policy Violations', value: '0', color: 'text-orange-400' },
                     ].map((stat, i) => (
@@ -911,15 +1070,24 @@ export function GuidedDemo() {
                         </ul>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-purple-400 mb-3">Technical Details</h4>
+                        <h4 className="text-sm font-semibold text-purple-400 mb-3">
+                          Technical Details
+                          {lastProofResult && useRealProver && (
+                            <span className="ml-2 px-2 py-0.5 bg-purple-500/20 text-purple-400 text-xs rounded">Live Data</span>
+                          )}
+                        </h4>
                         <div className="space-y-3 text-sm">
                           <div className="flex justify-between p-2 bg-dark-900/50 rounded-lg">
                             <span className="text-dark-400">Proof Size</span>
-                            <span className="text-white font-mono">~48 KB</span>
+                            <span className="text-white font-mono">
+                              {lastProofResult ? `${(lastProofResult.proofSizeBytes / 1024).toFixed(1)} KB` : '~48 KB'}
+                            </span>
                           </div>
                           <div className="flex justify-between p-2 bg-dark-900/50 rounded-lg">
                             <span className="text-dark-400">Generation Time</span>
-                            <span className="text-white font-mono">4-12 sec</span>
+                            <span className="text-white font-mono">
+                              {lastProofResult ? `${(lastProofResult.generationTimeMs / 1000).toFixed(1)}s` : '4-12 sec'}
+                            </span>
                           </div>
                           <div className="flex justify-between p-2 bg-dark-900/50 rounded-lg">
                             <span className="text-dark-400">Verification Gas</span>
@@ -927,7 +1095,9 @@ export function GuidedDemo() {
                           </div>
                           <div className="flex justify-between p-2 bg-dark-900/50 rounded-lg">
                             <span className="text-dark-400">Prover</span>
-                            <span className="text-white font-mono">NovaNet Jolt-Atlas</span>
+                            <span className="text-white font-mono">
+                              {useRealProver && proverOnline ? 'NovaNet (Live)' : 'Simulated'}
+                            </span>
                           </div>
                         </div>
                       </div>

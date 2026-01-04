@@ -2,11 +2,11 @@
 
 **Trustless Autonomous DeFi: AI Agents Managing Morpho Vaults with Cryptographic Policy Compliance**
 
-> ⚠️ **Disclaimer: Proof of Concept for Testing & Integration Exploration**
+> ⚠️ **Disclaimer: Integration Prototype - Testnet Only**
 >
-> This repository represents an **early-stage integration prototype** demonstrating how NovaNet's Jolt-Atlas zkML infrastructure could integrate with Morpho Blue. This is intended for **testing, demonstration, and exploratory purposes only**.
+> This repository demonstrates NovaNet's Jolt-Atlas zkML infrastructure integrated with Morpho Blue. The demo connects to a **live zkML prover** and contracts are **deployed on Arc Testnet**.
 >
-> **Not for production use.** Smart contracts have not been audited. See [What's Real vs. Simulated](#whats-real-vs-simulated) below.
+> **Not for production use.** Smart contracts have not been audited. On-chain transactions in the demo UI are simulated. See [What's Real vs. Simulated](#whats-real-vs-simulated) for details.
 
 ---
 
@@ -300,35 +300,49 @@ Automated rebalancers prove their actions stay within bounds.
 
 This prototype demonstrates the **architecture and integration pattern** for zkML-verified agent operations on Morpho Blue. Here's what's implemented vs. simulated:
 
-### ✅ Real / Production-Ready Architecture
+### ✅ Real / Live Components
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| **Smart Contract Design** | Real | `MorphoSpendingGate.sol` architecture, interfaces, and verification flow are production patterns |
+| **zkML Proof Generation** | **Live** | Connects to NovaNet Jolt-Atlas prover at `arc-policy-proofs.onrender.com` |
+| **Proof Data** | **Live** | Real ~48KB SNARK proofs generated in 4-12s (warm) / ~30s (cold start) |
+| **Smart Contracts** | **Deployed** | `MorphoSpendingGate` deployed on Arc Testnet at `0x93BDD317371A2ab0D517cdE5e9FfCDa51247770D` |
+| **Market Data** | **Live** | Fetches real APY/utilization from Morpho API (with fallback) |
 | **Policy Structure** | Real | `SpendingPolicy` struct with daily limits, LTV bounds, health factors, market whitelists |
 | **SDK TypeScript Types** | Real | Full type definitions for policies, proofs, operations |
-| **React Hooks Pattern** | Real | `useMorphoSpendingProof` hook architecture ready for real prover integration |
-| **Demo UI Workflow** | Real | Visualization of the end-to-end integration flow |
+| **React Hooks Pattern** | Real | `useMorphoSpendingProof` hook architecture |
+| **Demo UI Workflow** | Real | End-to-end visualization with live prover toggle |
 
 ### 🔶 Simulated / Mock Components
 
-| Component | Status | Production Requirement |
-|-----------|--------|------------------------|
-| **Jolt-Atlas Prover** | Mocked | Requires NovaNet prover service integration |
-| **Proof Generation** | Simulated | Currently returns mock proof data with simulated timing |
-| **Morpho Blue Contract** | Mocked | Uses `MockMorphoBlue.sol` - replace with real Morpho deployment |
-| **Proof Verification** | Mocked | `MockJoltAtlasVerifier.sol` always returns true |
-| **On-chain Transactions** | Simulated | Demo UI simulates txs, no actual blockchain calls |
-| **Market Data** | Live + Fallback | Fetches from Morpho API; falls back to cached values |
+| Component | Status | Notes |
+|-----------|--------|-------|
+| **On-chain Transactions** | Simulated | Demo UI simulates tx execution, no actual wallet signing |
 | **Agent Decisions** | Scripted | Demo uses pre-defined decision sequence |
+| **Morpho Blue Contract** | Mock | Uses `MockMorphoBlue.sol` on Arc Testnet |
+| **On-chain Verification** | Off-chain | Proofs verified by NovaNet prover, not on-chain verifier contract |
+
+### 🔄 Demo UI Toggle
+
+The demo UI includes a **Real/Simulated toggle** in the sidebar:
+- **Real Mode**: Calls live NovaNet prover, displays actual proof generation time and size
+- **Simulated Mode**: Uses mock proof animation for faster demos
 
 ### 🚀 Path to Production
 
-1. **Integrate NovaNet Prover** - Connect to live Jolt-Atlas prover service
-2. **Deploy to Arc Testnet** - Deploy `MorphoSpendingGate` on Circle's Arc L1 testnet (Chain ID: 5042002)
-3. **Implement Real Verifier** - Replace mock with actual SNARK verification
-4. **Security Audit** - Full audit of smart contracts before mainnet
-5. ~~**Live Market Data**~~ ✅ - Morpho API integration implemented (fetches real APY/utilization data)
+1. ~~**Integrate NovaNet Prover**~~ ✅ - Live integration with `@hshadab/spending-proofs` SDK
+2. ~~**Deploy to Arc Testnet**~~ ✅ - Contracts deployed (see addresses below)
+3. ~~**Live Market Data**~~ ✅ - Morpho API integration implemented
+4. **On-chain Verification** - Deploy SNARK verifier contract for trustless on-chain verification
+5. **Wallet Integration** - Connect real wallets for actual transaction signing
+6. **Security Audit** - Full audit of smart contracts before mainnet
+
+### 📍 Deployed Contract Addresses (Arc Testnet)
+
+| Contract | Address |
+|----------|---------|
+| MockMorphoBlue | `0x034459863E9d2d400E4d005015cB74c2Cd584e0E` |
+| MorphoSpendingGate | `0x93BDD317371A2ab0D517cdE5e9FfCDa51247770D` |
 
 ## Network Configuration
 
