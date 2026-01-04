@@ -1,0 +1,24 @@
+{
+  "name": "morpho-agentic-vault-manager",
+  "version": "0.1.0",
+  "description": "Demo: AI agent managing Morpho vaults with ZKML spending proofs",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "agent": "tsx src/agent.ts",
+    "simulate": "tsx src/simulate.ts"
+  },
+  "dependencies": {
+    "@hshadab/morpho-spending-proofs": "workspace:*",
+    "ethers": "^6.9.0",
+    "viem": "^2.0.0",
+    "dotenv": "^16.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  }
+}

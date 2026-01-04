@@ -1,0 +1,42 @@
+{
+  "name": "morpho-zkml-spending-proofs",
+  "version": "0.1.0",
+  "description": "ZKML spending proofs integration for Morpho Blue - Trustless autonomous DeFi",
+  "private": true,
+  "workspaces": [
+    "sdk",
+    "demo-app/*"
+  ],
+  "scripts": {
+    "build": "npm run build:contracts && npm run build:sdk",
+    "build:contracts": "forge build",
+    "build:sdk": "cd sdk && npm run build",
+    "test": "npm run test:contracts && npm run test:sdk",
+    "test:contracts": "forge test",
+    "test:sdk": "cd sdk && npm run test",
+    "demo": "cd demo-app/agent-vault-manager && npm run simulate",
+    "deploy": "npx tsx scripts/deploy.ts",
+    "setup-agent": "npx tsx scripts/setup-agent.ts",
+    "lint": "cd sdk && npm run lint",
+    "clean": "rm -rf out cache sdk/dist demo-app/*/dist"
+  },
+  "keywords": [
+    "morpho",
+    "zkml",
+    "jolt-atlas",
+    "spending-proofs",
+    "defi",
+    "ethereum",
+    "autonomous-agents"
+  ],
+  "author": "hshadab",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hshadab/morpho-zkml-spending-proofs"
+  },
+  "devDependencies": {
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  }
+}
