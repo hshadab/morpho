@@ -40,6 +40,19 @@ As AI agents become capable of managing DeFi positions, a critical trust gap eme
 
 **No proof, no transaction.** Every operation is cryptographically verified against the owner's policy.
 
+### What is a "Spending Policy"?
+
+In this context, "spending" refers to **capital disbursement**—how an agent allocates and moves the owner's funds:
+
+| Operation | Spending Action |
+|-----------|-----------------|
+| **Supply** | Spending funds into a lending market |
+| **Borrow** | Spending collateral/credit to take a loan |
+| **Withdraw** | Spending (moving) funds out of a market |
+| **Repay** | Spending funds to clear debt |
+
+A **spending policy** defines constraints on these capital flows: daily limits, max transaction size, allowed markets, and risk parameters (LTV, health factor). The zkML proof verifies that a neural network policy model approved the agent's action given these constraints.
+
 ## Key Features
 
 - **Policy-Gated Operations**: Supply, borrow, withdraw, repay all require valid proofs
