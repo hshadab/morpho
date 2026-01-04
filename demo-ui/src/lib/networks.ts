@@ -21,8 +21,8 @@ export const NETWORKS: Record<string, NetworkConfig> = {
     blockExplorer: 'https://testnet.arcscan.app',
     nativeToken: 'USDC',
     faucetUrl: 'https://faucet.circle.com',
-    morphoBlueAddress: undefined, // To be deployed
-    morphoSpendingGateAddress: undefined, // To be deployed
+    morphoBlueAddress: '0x034459863E9d2d400E4d005015cB74c2Cd584e0E',
+    morphoSpendingGateAddress: '0x93BDD317371A2ab0D517cdE5e9FfCDa51247770D',
     isTestnet: true,
   },
 
